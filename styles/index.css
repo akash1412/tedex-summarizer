@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Titillium+Web:ital@1&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*,
+*::after,
+*::before {
+	box-sizing: inherit;
+}
+
+html {
+	font-family: "Titillium Web", sans-serif;
+}
+
+body {
+	box-sizing: border-box;
+}
