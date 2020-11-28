@@ -1,23 +1,49 @@
-import { useRef } from "react";
+import { useEffect, useRef, useContext } from "react";
 
-const Form = ({ handleFormSubmit }) => {
+import { GlobalContext } from "../context/context";
+
+const Form = () => {
+	const { handleToggleFormInput } = useContext(GlobalContext);
+
 	const inputRef = useRef();
+	const formRef = useRef();
+
+	const checkComponentCLick = e => {
+		if (formRef.current.contains(e.target)) {
+			return;
+		}
+
+		handleToggleFormInput();
+	};
+
+	useEffect(() => {
+		document.addEventListener("mousedown", checkComponentCLick);
+
+		return () => {
+			document.removeEventListener("mousedown", checkComponentCLick);
+		};
+	}, []);
+
+	const { GetSummarizer } = useContext(GlobalContext);
 
 	return (
 		<form
-			className='self-center flex w-full md:w-1/2'
+			className='flex flex-col items-center  w-full md:w-1/2 '
 			onSubmit={e => {
 				e.preventDefault();
-				handleFormSubmit(inputRef.current.value);
-			}}>
+				GetSummarizer(inputRef.current.value);
+				inputRef.current.value = "";
+			}}
+			ref={formRef}>
 			<input
-				className='py-2 px-2  md:py-6 md:px-3 flex-grow border-2 border-solid border-black-100 bg-gray-100'
+				className='self-stretch py-2 px-2  md:py-6 md:px-3 flex-grow border-2 border-solid border-red-200 focus:bg-gray-100 focus:border-red-400 focus:outline-none focus:border-3'
 				placeholder='paste video url'
 				type='text'
 				ref={inputRef}
+				// onKeyDown={}
 			/>
-			<button className='w-1/4 md:w-16 bg-black-100 text-white text-sm border-2 border-solid border-black-100'>
-				get transcript
+			<button className=' bg-red-700 text-white text-sm  mt-2 px-8 py-1 rounded hover:bg-red-300'>
+				Read
 			</button>
 		</form>
 	);
